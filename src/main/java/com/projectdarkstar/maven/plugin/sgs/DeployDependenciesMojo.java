@@ -60,7 +60,7 @@ import java.util.List;
  * @goal deploy-dependencies
  */
 public class DeployDependenciesMojo extends AbstractDeployMojo {
-    
+
     /**
      * The Maven project POM
      *
@@ -71,102 +71,102 @@ public class DeployDependenciesMojo extends AbstractDeployMojo {
      */
     protected MavenProject project;
 
-    
+
     /**
      * A list of artifactIds from the project's dependencies to deploy
      * into the server installation.  By default, all project dependencies
      * are deployed.
-     * 
+     *
      * @parameter
      * @since 1.0-alpha-1
      */
     private String[] includeArtifactIds;
-    
+
     /**
      * A list of classifiers to include.  By default, all classifiers are
      * included.
-     * 
+     *
      * @parameter
      * @since 1.0-alpha-1
      */
     private String[] includeClassifiers;
-    
+
     /**
      * A list of types to include.  By default, all types are included.
-     * 
+     *
      * @parameter
      * @since 1.0-alpha-1
      */
     private String[] includeTypes;
-    
+
     /**
      * A single scope identifier.  Only artifacts from the given scope are
      * included.  If both the includeScope and the excludeScope configuration
      * properties are set, the excludeScope property will be ignored.  By
      * default, only artifacts that satisfy the compile scope are included.
-     * 
+     *
      * @parameter
      * @since 1.0-beta-1
      */
     private String includeScope;
-    
+
     /**
      * A list of artifactIds from the project's dependencies to exclude
      * from the deployment list.  By default, all project dependencies
      * are deployed.
-     * 
+     *
      * @parameter
      * @since 1.0-alpha-1
      */
     private String[] excludeArtifactIds;
-    
+
     /**
      * A list of classifiers to exclude.
-     * 
+     *
      * @parameter
      * @since 1.0-alpha-1
      */
     private String[] excludeClassifiers;
-    
+
     /**
      * A list of types to exclude.
-     * 
+     *
      * @parameter
      * @since 1.0-alpha-1
      */
     private String[] excludeTypes;
-    
+
     /**
      * A single scope identifier.  All artifacts from the given scope are
      * excluded.  If both the includeScope and the excludeScope configuration
      * properties are set, the excludeScope property will be ignored.
-     * 
+     *
      * @parameter
      * @since 1.0-beta-1
      */
     private String excludeScope;
-    
+
     /**
      * Exclude transitive dependencies.  Default value is false.
-     * 
+     *
      * @parameter default-value="false"
      * @since 1.0-alpha-1
      */
     private boolean excludeTransitive;
-    
+
     /**
-     * If true, any dependencies that are transitive dependencies whose 
-     * non-transitive parent dependencies have been excluded, 
+     * If true, any dependencies that are transitive dependencies whose
+     * non-transitive parent dependencies have been excluded,
      * should also be excluded.
-     * 
+     *
      * @parameter default-value="true"
      * @since 1.0-alpha-3
      */
     private boolean excludeOrphanTransitive;
-    
-    /** 
+
+    /**
      * Componented used for resolving Maven Artifacts.
-     * 
+     *
      * @component
      * @readonly
      * @required
@@ -176,7 +176,7 @@ public class DeployDependenciesMojo extends AbstractDeployMojo {
 
     /**
      * The local Maven repository.
-     * 
+     *
      * @parameter expression="${localRepository}"
      * @readonly
      * @required
@@ -184,28 +184,28 @@ public class DeployDependenciesMojo extends AbstractDeployMojo {
      */
     private ArtifactRepository localRepository;
 
-    /** 
+    /**
      * The available remote Maven repositories.
-     * 
-     * @parameter expression="${project.remoteArtifactRepositories}" 
+     *
+     * @parameter expression="${project.remoteArtifactRepositories}"
      * @readonly
      * @required
      * @since 1.0-alpha-3
      */
     private List remoteRepositories;
-    
+
     /**
      * Component used to resolve artifacts.
-     * 
+     *
      * @component
      * @readonly
      * @required
      * @since 1.0-alpha-3
      */
     private ArtifactMetadataSource artifactMetadataSource;
-    
+
     public File[] getFiles() throws MojoExecutionException {
-        
+
         FilterArtifacts filter = buildFilter();
         Set baseArtifacts = null;
         if(excludeOrphanTransitive) {
@@ -228,30 +228,30 @@ public class DeployDependenciesMojo extends AbstractDeployMojo {
         } else {
             baseArtifacts = project.getArtifacts();
         }
-        
+
         try {
-            
+
             Set artifacts = filter.filter(baseArtifacts);
             File[] files = new File[artifacts.size()];
-            
+
             Iterator a = artifacts.iterator();
             for(int i = 0; a.hasNext(); i++) {
                 files[i] = ((Artifact) a.next()).getFile();
             }
-            
+
             return files;
         } catch (ArtifactFilterException e) {
             throw new MojoExecutionException("Failure filtering artifacts", e);
         }
 
     }
-    
+
     private FilterArtifacts buildFilter() {
         //default to using dependencies with scope compile
         if(includeScope == null && excludeScope == null) {
             includeScope = "compile";
         }
-        
+
         FilterArtifacts f = new FilterArtifacts();
         f.addFilter(new ArtifactIdFilter(safeJoin(includeArtifactIds, ","),
                                          safeJoin(excludeArtifactIds, ",")));
@@ -259,14 +259,20 @@ public class DeployDependenciesMojo extends AbstractDeployMojo {
                                          safeJoin(excludeClassifiers, ",")));
         f.addFilter(new TypeFilter(safeJoin(includeTypes, ","),
                                    safeJoin(excludeTypes, ",")));
-        f.addFilter(new ScopeFilter(includeScope,
-                                    excludeScope));
+
+        if (includeScope != null) {
+            f.addFilter(new ScopeFilter(includeScope, null));
+        }
+
+        if (excludeScope != null) {
+            f.addFilter(new ScopeFilter(null, excludeScope));
+        }
+
         f.addFilter(new ProjectTransitivityFilter(project.getDependencyArtifacts(),
                                                   excludeTransitive));
-        
         return f;
     }
-    
+
     private String safeJoin(String[] strings, String delimiter) {
         if(strings == null) {
             return "";
