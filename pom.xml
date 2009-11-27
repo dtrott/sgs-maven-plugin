@@ -1,195 +1,206 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.projectdarkstar.maven.plugin</groupId>
-  <artifactId>sgs-maven-plugin</artifactId>
-  <packaging>maven-plugin</packaging>
-  <version>1.0-beta-1</version>
-  <name>Project Darkstar Maven Plugin</name>
-  <url>https://sgs-maven-plugin.dev.java.net</url>
-  <inceptionYear>2009</inceptionYear>
-  <description>
-    This plugin provides the ability to control a Project Darkstar server
-    installation from Maven.  Capabilities include: installation of the server
-    distribution itself, deploying application JAR files into the server,
-    configuring the server, booting up the server, or shutting down the server.
-    This plugin is compatible with Project Darkstar server version 0.9.8 or
-    later.
-  </description>
-  
-  <build>
-    <plugins>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.projectdarkstar.maven.plugin</groupId>
+    <artifactId>sgs-maven-plugin-dtrott</artifactId>
+    <packaging>maven-plugin</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>Project Darkstar Maven Plugin</name>
+    <url>https://sgs-maven-plugin.dev.java.net</url>
+    <inceptionYear>2009</inceptionYear>
+    <description>
+        This plugin provides the ability to control a Project Darkstar server
+        installation from Maven. Capabilities include: installation of the server
+        distribution itself, deploying application JAR files into the server,
+        configuring the server, booting up the server, or shutting down the server.
+        This plugin is compatible with Project Darkstar server version 0.9.8 or
+        later.
+    </description>
 
-      <plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-compiler-plugin</artifactId>
-	<configuration>
-	  <compilerArgument>-Xlint</compilerArgument>
-	  <source>1.5</source>
-	  <target>1.5</target>
-	</configuration>
-      </plugin>
+    <scm>
+        <connection>scm:git:git://github.com/dtrott/sgs-maven-plugin.git</connection>
+    </scm>
 
-      <plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-remote-resources-plugin</artifactId>
-	<configuration>
-	  <properties>
-	    <projectYear>${projectYear}</projectYear>
-	  </properties>
-	</configuration>
-	<executions>
-	  <execution>
-	    <id>include-bsd-license</id>
-	    <goals>
-	      <goal>process</goal>
-	    </goals>
-	    <phase>generate-resources</phase>
-	    <configuration>
-	      <resourceBundles>
-		<resourceBundle>com.projectdarkstar.tools.build:sgs-jar-resources-bsd:${sgs-jar-resources-bsd.version}</resourceBundle>
-	      </resourceBundles>
-	    </configuration>
-	  </execution>
-	</executions>
-      </plugin>
+    <distributionManagement>
+        <downloadUrl>http://dtrott.truefreehost.com/maven2/repository/</downloadUrl>
+        <repository>
+            <id>truefreehost</id>
+            <name>Truefreehost Repository</name>
+            <url>ftp://ftp.truefreehost.com/htdocs/maven2/repository</url>
+        </repository>
+    </distributionManagement>
 
-      <plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-surefire-plugin</artifactId>
-	<configuration>
-	  <redirectTestOutputToFile>true</redirectTestOutputToFile>
-	</configuration>
-      </plugin>
-      
-    </plugins>
+    <build>
+        <plugins>
 
-    <testResources>
-      <testResource>
-        <directory>src/test/resources</directory>
-	<excludes>
-	  <exclude>**/*.zip</exclude>
-	</excludes>
-        <filtering>true</filtering>
-      </testResource>
-      <testResource>
-        <directory>src/test/resources</directory>
-	<includes>
-	  <include>**/*.zip</include>
-	</includes>
-        <filtering>false</filtering>
-      </testResource>
-    </testResources>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <compilerArgument>-Xlint</compilerArgument>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-remote-resources-plugin</artifactId>
+                <configuration>
+                    <properties>
+                        <projectYear>${projectYear}</projectYear>
+                    </properties>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>include-bsd-license</id>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <resourceBundles>
+                                <resourceBundle>
+                                    com.projectdarkstar.tools.build:sgs-jar-resources-bsd:${sgs-jar-resources-bsd.version}
+                                </resourceBundle>
+                            </resourceBundles>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                </configuration>
+            </plugin>
+        </plugins>
+
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <excludes>
+                    <exclude>**/*.zip</exclude>
+                </excludes>
+                <filtering>true</filtering>
+            </testResource>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>**/*.zip</include>
+                </includes>
+                <filtering>false</filtering>
+            </testResource>
+        </testResources>
 
 
-    <!-- Include the wagon-svn extension so we can deploy
-	 to Maven2 repositories hosted in SVN repositories
-	 on java.net -->
-    <extensions>
-      <extension>
-        <groupId>org.jvnet.wagon-svn</groupId>
-        <artifactId>wagon-svn</artifactId>
-	<version>${wagon-svn.version}</version>
-      </extension>
-    </extensions>
+        <!-- Include the wagon-svn extension so we can deploy
+       to Maven2 repositories hosted in SVN repositories
+       on java.net -->
+        <extensions>
+            <extension>
+                <groupId>org.jvnet.wagon-svn</groupId>
+                <artifactId>wagon-svn</artifactId>
+                <version>${wagon-svn.version}</version>
+            </extension>
 
-  </build>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ftp</artifactId>
+                <version>1.0-beta-6</version>
+            </extension>
+        </extensions>
+    </build>
 
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-plugin-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </reporting>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
 
-  <repositories>
-    <repository>
-      <id>java.net</id>
-      <name>java.net Maven2 Repository</name>
-      <url>http://download.java.net/maven/2/</url>
-      <layout>default</layout>
-    </repository>
-  </repositories>
+    <repositories>
+        <repository>
+            <id>java.net</id>
+            <name>java.net Maven2 Repository</name>
+            <url>http://download.java.net/maven/2/</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
 
-  <distributionManagement>
-    <repository>
-      <id>java.net-maven2-repository</id>
-      <name>java.net Maven2 Repository</name>
-      <url>java-net:/maven2-repository/trunk/repository/</url>
-    </repository>
-  </distributionManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>${maven.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-artifact</artifactId>
+            <version>${maven.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-project</artifactId>
+            <version>${maven.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.shared</groupId>
+            <artifactId>maven-common-artifact-filters</artifactId>
+            <version>${maven-common-artifact-filters.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version>${plexus-utils.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-archiver</artifactId>
+            <version>${plexus-archiver.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-container-default</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-component-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-plugin-api</artifactId>
-      <version>${maven.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-artifact</artifactId>
-      <version>${maven.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-project</artifactId>
-      <version>${maven.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.shared</groupId>
-      <artifactId>maven-common-artifact-filters</artifactId>
-      <version>${maven-common-artifact-filters.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-utils</artifactId>
-      <version>${plexus-utils.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-archiver</artifactId>
-      <version>${plexus-archiver.version}</version>
-      <exclusions>
-	<exclusion>
-	  <groupId>org.codehaus.plexus</groupId>
-	  <artifactId>plexus-container-default</artifactId>
-	</exclusion>
-	<exclusion>
-	  <groupId>org.codehaus.plexus</groupId>
-	  <artifactId>plexus-component-api</artifactId>
-	</exclusion>
-      </exclusions>
-    </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugin-testing</groupId>
+            <artifactId>maven-plugin-testing-harness</artifactId>
+            <version>${maven-plugin-testing-harness.version}</version>
+            <scope>test</scope>
+        </dependency>
 
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.plugin-testing</groupId>
-      <artifactId>maven-plugin-testing-harness</artifactId>
-      <version>${maven-plugin-testing-harness.version}</version>
-      <scope>test</scope>
-    </dependency>
+    </dependencies>
 
-  </dependencies>
+    <properties>
+        <projectYear>2009</projectYear>
+        <minimum.sgs.version>0.9.11</minimum.sgs.version>
+        <sgs-jar-resources-bsd.version>1.0</sgs-jar-resources-bsd.version>
 
-  <properties>
-    <projectYear>2009</projectYear>
-    <minimum.sgs.version>0.9.11</minimum.sgs.version>
-    <sgs-jar-resources-bsd.version>1.0</sgs-jar-resources-bsd.version>
+        <maven.version>2.0.9</maven.version>
+        <maven-common-artifact-filters.version>1.2</maven-common-artifact-filters.version>
+        <plexus-utils.version>1.5.6</plexus-utils.version>
+        <plexus-archiver.version>1.0-alpha-11</plexus-archiver.version>
 
-    <maven.version>2.0.9</maven.version>
-    <maven-common-artifact-filters.version>1.2</maven-common-artifact-filters.version>
-    <plexus-utils.version>1.5.6</plexus-utils.version>
-    <plexus-archiver.version>1.0-alpha-11</plexus-archiver.version>
-
-    <junit.version>4.5</junit.version>
-    <maven-plugin-testing-harness.version>1.2</maven-plugin-testing-harness.version>
-    <wagon-svn.version>1.9</wagon-svn.version>
-  </properties>
+        <junit.version>4.5</junit.version>
+        <maven-plugin-testing-harness.version>1.2</maven-plugin-testing-harness.version>
+        <wagon-svn.version>1.9</wagon-svn.version>
+    </properties>
 </project>
